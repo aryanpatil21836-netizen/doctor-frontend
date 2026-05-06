@@ -6,18 +6,11 @@ const MyAppointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
       const res = await axios.get(
-        "https://doctor-appointment-r403.onrender.com/api/appointments/my",
-        {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        }
+        "https://doctor-appointment-r403.onrender.com/api/appointments"
       );
 
-      setAppointments(res.data);
+      setAppointments(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.log(error);
       alert("Failed to fetch appointments");
