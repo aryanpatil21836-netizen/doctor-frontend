@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = "https://doctor-appointment-r403.onrender.com/api/doctors";
+
 const AdminPage = () => {
   const [doctors, setDoctors] = useState([]);
 
@@ -11,10 +13,12 @@ const AdminPage = () => {
 
   const fetchDoctors = async () => {
     try {
-      const res = await axios.get("https://doctor-appointment-r403.onrender.com");
-      setDoctors(res.data);
+      const res = await axios.get(API);
+      setDoctors(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
+      console.log(error);
       alert("Doctors fetch failed");
+      setDoctors([]);
     }
   };
 
@@ -22,7 +26,7 @@ const AdminPage = () => {
     e.preventDefault();
 
     try {
-      await axios.post("https://doctor-appointment-r403.onrender.com", {
+      await axios.post(API, {
         name,
         specialization,
         fees,
@@ -38,6 +42,7 @@ const AdminPage = () => {
 
       fetchDoctors();
     } catch (error) {
+      console.log(error);
       alert("Doctor add failed");
     }
   };
@@ -45,10 +50,11 @@ const AdminPage = () => {
   const deleteDoctorHandler = async (id) => {
     if (window.confirm("Delete doctor?")) {
       try {
-        await axios.delete(`https://doctor-appointment-r403.onrender.com`);
+        await axios.delete(`${API}/${id}`);
         alert("Doctor deleted");
         fetchDoctors();
       } catch (error) {
+        console.log(error);
         alert("Delete failed");
       }
     }
