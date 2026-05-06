@@ -5,13 +5,35 @@ const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   const fetchAppointments = async () => {
-    const res = await axios.get("https://doctor-appointment-r403.onrender.com");
-    setAppointments(res.data);
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+      const res = await axios.get(
+        "https://doctor-appointment-r403.onrender.com/api/appointments/my",
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      setAppointments(res.data);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to fetch appointments");
+    }
   };
 
   const deleteHandler = async (id) => {
-    await axios.delete(`https://doctor-appointment-r403.onrender.com`);
-    fetchAppointments();
+    try {
+      await axios.delete(
+        `https://doctor-appointment-r403.onrender.com/api/appointments/${id}`
+      );
+
+      fetchAppointments();
+    } catch (error) {
+      alert("Delete failed");
+    }
   };
 
   useEffect(() => {
@@ -22,17 +44,21 @@ const MyAppointments = () => {
     <div className="container">
       <h2>My Appointments</h2>
 
-      {appointments.map((item) => (
-        <div key={item._id} className="card">
-          <p><b>Doctor:</b> {item.doctor}</p>
-          <p><b>Date:</b> {item.date}</p>
-          <p><b>Time:</b> {item.time}</p>
+      {appointments.length === 0 ? (
+        <p>No appointments found</p>
+      ) : (
+        appointments.map((item) => (
+          <div key={item._id} className="card">
+            <p><b>Doctor:</b> {item.doctor}</p>
+            <p><b>Date:</b> {item.date}</p>
+            <p><b>Time:</b> {item.time}</p>
 
-          <button onClick={() => deleteHandler(item._id)}>
-            Delete
-          </button>
-        </div>
-      ))}
+            <button onClick={() => deleteHandler(item._id)}>
+              Delete
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 };
