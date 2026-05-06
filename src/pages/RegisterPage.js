@@ -10,7 +10,7 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://doctor-appointment-r403.onrender.com", {
+      const res = await axios.post("https://doctor-appointment-r403.onrender.com/api/users/register", {
         name,
         email,
         password,
