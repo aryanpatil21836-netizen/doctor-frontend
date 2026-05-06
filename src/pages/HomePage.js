@@ -8,7 +8,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await axios.get("https://doctor-appointment-r403.onrender.com");
+        const res = await axios.get("https://doctor-appointment-r403.onrender.com/api/doctors");
         setDoctors(res.data);
       } catch (error) {
         alert("Doctors fetch failed");
