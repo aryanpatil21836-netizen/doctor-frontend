@@ -22,7 +22,7 @@ const BookAppointment = () => {
 
     try {
       await axios.post(
-        "https://doctor-appointment-r403.onrender.com/api/appointments",
+       "https://doctor-appointment-r403.onrender.com/api/appointments/book",
         {
           doctor: doctorName,
           date,
